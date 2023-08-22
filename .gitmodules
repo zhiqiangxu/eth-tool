@@ -1,0 +1,3 @@
+[submodule "third-party/lighthouse"]
+	path = third-party/lighthouse
+	url = https://github.com/sigp/lighthouse
