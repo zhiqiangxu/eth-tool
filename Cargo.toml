@@ -8,5 +8,9 @@ edition = "2021"
 [dependencies]
 clap = { version = "4.3.21", features = ["derive","cargo"] }
 eth2 = { path = "third-party/lighthouse/common/eth2" }
+consensus_types = { package="types", path = "third-party/lighthouse/consensus/types" }
+bls = { path = "third-party/lighthouse/crypto/bls" }
 futures = { version = "0.3.1" }
 tokio = "1.32.0"
+hex = "0.4.3"
+

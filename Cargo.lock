@@ -1723,10 +1723,13 @@ dependencies = [
 name = "eth-tool"
 version = "0.1.0"
 dependencies = [
+ "bls",
  "clap 4.3.21",
  "eth2",
  "futures",
+ "hex",
  "tokio",
+ "types",
 ]
 
 [[package]]
