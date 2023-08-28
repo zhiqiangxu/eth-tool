@@ -13,4 +13,5 @@ bls = { path = "third-party/lighthouse/crypto/bls" }
 futures = { version = "0.3.1" }
 tokio = "1.32.0"
 hex = "0.4.3"
+tree_hash = "0.5.0"
 

@@ -2,6 +2,7 @@ use clap::Parser;
 
 mod beacon;
 mod deposit;
+mod util;
 
 #[derive(Parser)]
 enum Cli {

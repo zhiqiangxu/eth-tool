@@ -1,16 +1,19 @@
 use clap::Parser;
 
-mod gen;
+mod data_root;
+mod sign;
 
 #[derive(Parser, Debug)]
 pub enum Commands {
-    Gen(gen::Gen),
+    Sign(sign::Sign),
+    DataRoot(data_root::DataRoot),
 }
 
 impl Commands {
     pub fn run(&self) {
         match &self {
-            Commands::Gen(gen) => gen.run(),
+            Commands::Sign(inner) => inner.run(),
+            Commands::DataRoot(inner) => inner.run(),
         }
     }
 }

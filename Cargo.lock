@@ -1729,6 +1729,7 @@ dependencies = [
  "futures",
  "hex",
  "tokio",
+ "tree_hash",
  "types",
 ]
 
