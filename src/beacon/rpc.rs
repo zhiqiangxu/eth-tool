@@ -21,6 +21,7 @@ pub enum RPC {
     ProtoArray(ProtoArray),
     DepositSnapshot(DepositSnapshot),
     BlockRewards(BlockRewards),
+    Validator(Validator),
     Database(Database),
     Staking(Staking),
     StateBalances(StateBalances),
@@ -101,6 +102,7 @@ impl SlotHeader {
             SensitiveUrl::from_str(self.url.as_str()).unwrap(),
             Timeouts::set_all(Duration::new(1, 0)),
         );
+
         let runtime = tokio::runtime::Runtime::new().expect("Unable to create a runtime");
         let result = runtime
             .block_on(client.get_beacon_headers(Some(self.slot.into()), None))
@@ -190,6 +192,37 @@ impl BlockRewards {
             .block_on(
                 client.get_lighthouse_analysis_block_rewards(self.start.into(), self.end.into()),
             )
+            .unwrap();
+        println!("{:?}", result);
+    }
+}
+
+#[derive(Parser, Debug)]
+pub struct Validator {
+    #[arg(long)]
+    url: String,
+    #[arg(long)]
+    state: String,
+    #[arg(long, num_args(1..))]
+    ids: Vec<String>,
+}
+
+impl Validator {
+    pub fn run(&self) {
+        let client = BeaconNodeHttpClient::new(
+            SensitiveUrl::from_str(self.url.as_str()).unwrap(),
+            Timeouts::set_all(Duration::new(1, 0)),
+        );
+
+        let runtime = tokio::runtime::Runtime::new().expect("Unable to create a runtime");
+        let state_id = FromStr::from_str(&self.state).unwrap();
+        let ids: Vec<_> = self
+            .ids
+            .iter()
+            .map(|id| ValidatorId::from_str(&id).unwrap())
+            .collect();
+        let result = runtime
+            .block_on(client.get_beacon_states_validators(state_id, Some(ids.as_ref()), None))
             .unwrap();
         println!("{:?}", result);
     }
@@ -449,6 +482,7 @@ impl RPC {
             RPC::ProtoArray(inner) => inner.run(),
             RPC::DepositSnapshot(inner) => inner.run(),
             RPC::BlockRewards(inner) => inner.run(),
+            RPC::Validator(inner) => inner.run(),
             RPC::Database(inner) => inner.run(),
             RPC::Staking(inner) => inner.run(),
             RPC::StateBalances(inner) => inner.run(),
