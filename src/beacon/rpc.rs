@@ -475,7 +475,7 @@ pub struct Blobs {
     #[arg(long)]
     url: String,
     #[arg(long)]
-    block_id: String,
+    slot: String,
     #[arg(long)]
     ids: Option<Vec<u64>>,
 }
@@ -488,10 +488,20 @@ impl Blobs {
         );
 
         let runtime = tokio::runtime::Runtime::new().expect("Unable to create a runtime");
-        // let result = runtime
-        //     .block_on(client.get_blobs(BlockId::from_str(self.block_id.as_str()), self.ids))
-        //     .unwrap();
-        // println!("{:?}", result);
+        let result = runtime
+            .block_on(client.get_blobs::<MainnetEthSpec>(
+                BlockId::from_str(self.slot.as_str()).unwrap(),
+                self.ids.as_deref(),
+            ))
+            .unwrap()
+            .unwrap();
+        if result.data.len() == 1 {
+            print!("0x{}", hex::encode(result.data[0].blob.to_vec()));
+        } else {
+            for sidecar in result.data {
+                println!("0x{}", hex::encode(sidecar.blob.to_vec()));
+            }
+        }
     }
 }
 
