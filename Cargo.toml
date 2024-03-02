@@ -7,9 +7,9 @@ edition = "2021"
 
 [dependencies]
 clap = { version = "4.3.21", features = ["derive","cargo"] }
-eth2 = {  package="eth2", git = "https://github.com/sigp/lighthouse"  }
-consensus_types = { package="types", git = "https://github.com/sigp/lighthouse" }
-bls = { package="bls", git = "https://github.com/sigp/lighthouse"  }
+eth2 = {  package="eth2", git = "https://github.com/sigp/lighthouse", branch="stable"  }
+consensus_types = { package="types", git = "https://github.com/sigp/lighthouse", branch="stable" }
+bls = { package="bls", git = "https://github.com/sigp/lighthouse", branch="stable"  }
 futures = { version = "0.3.1" }
 tokio = "1.32.0"
 hex = "0.4.3"

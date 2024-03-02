@@ -30,6 +30,7 @@ pub enum RPC {
     Eth1Syncing(Eth1Syncing),
     NodeVersion(NodeVersion),
     PeerCount(PeerCount),
+    Blobs(Blobs),
 }
 
 #[derive(Parser, Debug)]
@@ -469,6 +470,31 @@ impl PeerCount {
     }
 }
 
+#[derive(Parser, Debug)]
+pub struct Blobs {
+    #[arg(long)]
+    url: String,
+    #[arg(long)]
+    block_id: String,
+    #[arg(long)]
+    ids: Option<Vec<u64>>,
+}
+
+impl Blobs {
+    pub fn run(&self) {
+        let client = BeaconNodeHttpClient::new(
+            SensitiveUrl::from_str(self.url.as_str()).unwrap(),
+            Timeouts::set_all(Duration::new(1, 0)),
+        );
+
+        let runtime = tokio::runtime::Runtime::new().expect("Unable to create a runtime");
+        // let result = runtime
+        //     .block_on(client.get_blobs(BlockId::from_str(self.block_id.as_str()), self.ids))
+        //     .unwrap();
+        // println!("{:?}", result);
+    }
+}
+
 impl RPC {
     pub fn run(&self) {
         match &self {
@@ -491,6 +517,7 @@ impl RPC {
             RPC::Eth1Syncing(inner) => inner.run(),
             RPC::NodeVersion(inner) => inner.run(),
             RPC::PeerCount(inner) => inner.run(),
+            RPC::Blobs(inner) => inner.run(),
         }
     }
 }
